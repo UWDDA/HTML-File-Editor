@@ -1,0 +1,41 @@
+<html>
+
+<head></head>
+
+<body>
+    <div id="editor"></div>
+    <script>
+        // open /Applications/Google\ Chrome.app/ --args --allow-file-access-from-files
+
+        function readTextFile(file) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.open("GET", file, false);
+            rawFile.onreadystatechange = function () {
+                if (rawFile.readyState === 4) {
+                    if (rawFile.status === 200 || rawFile.status == 0) {
+                        var allText = rawFile.responseText;
+                        const result = allText.split(/\r?\n/);
+                        for(i = 0; i < result.length; i++){
+                            lineData = result[i];
+                            if(lineData.includes("=")){
+                                tmplineData = lineData.split("=");
+                                lineData = tmplineData[0] + ' = <input type="text" value="'+tmplineData[1]+'" />';
+                            }
+
+                            document.getElementById("editor").innerHTML += lineData + "<br>";
+                        }
+
+                        document.getElementById("editor").innerHTML += "<button>Save</button>";
+                    }
+                }
+            }
+            rawFile.send(null);
+        }
+
+
+        readTextFile("sample.ini");
+
+    </script>
+</body>
+
+</html>
